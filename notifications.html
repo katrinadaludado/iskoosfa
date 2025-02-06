@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        body {
+            background-color:#FBF5DF;
+        }
+
+        .notification-card {
+            cursor: pointer;
+            margin-bottom: 10px;
+            border-radius: 20px;
+        }
+
+        .notification-card.unread {
+            font-weight: bold;
+            font-family: Arial, Helvetica, sans-serif;
+            opacity: 1;
+        }
+
+        .notification-card.read {
+            color: #707070;
+            font-weight: normal;
+            opacity: 0.6;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .help {
+            position: fixed;    
+            bottom: 20px;       
+            right: 20px;        
+            z-index: 1000;      
+        }
+
+        .help img {
+            width: 50px;        
+            height: 50px;
+            cursor: pointer;    
+        }
+
+        .nav-link:hover {
+            background-color: #d9534f;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .nav-link.active {
+            background-color: #c9302c;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-nav {
+                flex-direction: row;
+            }
+
+            .nav-link {
+                padding-right: .5rem;
+                padding-left: .5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: #A52A2A;">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
+                <img src="images/PUPLogo.png" alt="Logo" width="40" class="me-2">
+                PUP Office of Scholarship and Financial Assistance
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link text-white" href="homepage.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="notifications.html">Notifications</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="applications.html">Applications</a></li>
+                    <li class="nav-item"><a id="logout-btn" class="nav-link text-white" href="login.html"><i class="fas fa-sign-out-alt"></i></a></li>
+                    <li class="nav-item"><a href="api/profile.php" class="nav-link text-white"><i class="fas fa-user"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="help">
+        <a href="inquirypage.html">
+            <img src="images/helpbutton.png" alt="Help">
+        </a>
+     </div>
+
+    <div class="container mt-4">
+        <h2 class="text-white display-6 fw-bold" style="text-shadow: 2px 2px 8px rgba(0, 0, 0, 5);">
+            <img src="images/bell.png" alt="Star" width="40" height="40" style="vertical-align: middle;"> Notifications
+        </h2>
+        <div id="notifications-list"></div>
+    </div>
+
+    <!-- Modal for detailed view -->
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">Notification Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="notification-message"></p>
+                    <p id="notification-timestamp" class="text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+            document.getElementById("logout-btn").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent default form submission or button behavior
+
+            let confirmLogout = confirm("Are you sure you want to log out?");
+            if (confirmLogout) {
+                window.location.href = "login.html"; 
+            }
+        });
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const userId = sessionStorage.getItem("user_id");
+
+            if (!userId) {
+                alert("Please log in to view notifications.");
+                window.location.href = "login.html";
+                return;
+            }
+
+            // Fetch notifications from the server
+            fetch(`http://localhost/Isko/api/get_notifications.php?user_id=${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const notificationsContainer = document.getElementById("notifications-list");
+
+                    if (data.success && data.data.length > 0) {
+                        notificationsContainer.innerHTML = data.data.map(notification => {
+                            const statusClass = notification.status.toLowerCase(); // 'read' or 'unread'
+                            return `
+                                <div class="notification-card ${statusClass}" id="notification-${notification.notification_id}" onclick="openNotificationModal(${notification.notification_id}, '${notification.message}', '${notification.timestamp}', this)">
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <p class="card-text">${notification.message}</p>
+                                            <p class="text-muted">${notification.timestamp}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                    } else {
+                        notificationsContainer.innerHTML = `
+                        <div class="d-flex justify-content-center align-items-center" style="min-height: 10vh; text-align: center;">
+                            <div>
+                                <img src="images/nonotifications.png" alt="No Notifications" class="img-fluid" style="max-width: 500px; margin-bottom: 20px;">
+                                <h2 class="lead text-white fw-bold display-6" style="text-shadow: 2px 2px 8px rgba(0, 0, 0, 5);">No Notifications Yet!</h2>
+                                <p class="text-white" style="font-size: 1.2rem; margin-bottom: 80px; text-shadow: 2px 2px 8px rgba(0, 0, 0, 5);">You have no notifications right now.</p>
+                            </div>
+                        </div>
+                    `;
+
+                    }
+                })
+                .catch(error => console.error('Error fetching notifications:', error));
+
+            window.openNotificationModal = function (notificationId, message, timestamp, cardElement) {
+                document.getElementById("notification-message").innerText = message;
+                document.getElementById("notification-timestamp").innerText = timestamp;
+
+                // Mark notification as read
+                fetch(`http://localhost/Isko/api/mark_as_read.php?notificationId=${notificationId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Change the notification to read
+                            cardElement.classList.remove('unread');
+                            cardElement.classList.add('read');
+                            cardElement.style.cursor = 'default'; 
+                        } else {
+                            alert('Error marking notification as read.');
+                        }
+                    })
+                    .catch(error => console.error('Error marking notification as read:', error));
+
+                // Show the modal
+                var myModal = new bootstrap.Modal(document.getElementById('notificationModal'), {
+                    keyboard: false
+                });
+                myModal.show();
+            };
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

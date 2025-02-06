@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scholarship Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> <!-- Boxicons for icons -->
+    <style>
+      /* hide multi-step application form */
+      body {
+            background-color:#FBF5DF;
+        }
+      
+      .hidden {
+        display: none;
+      }
+
+      .submit-button {
+        /* background-color: #FFDF00;  */
+        /* color: black; */
+        margin-top: 20px; /* Space above the button */
+        display: block; /* Make it a block element */
+        width: 100%; /* Full width */
+      }
+      #application-form {
+        position: relative; /* Set position to relative */
+        padding: 20px; /* Add some padding */
+      }
+
+      .button-container {
+        display: flex; /* Use flexbox */
+        justify-content: space-between; /* Space between buttons */
+        margin-top: 20px; /* Space above the buttons */
+      }
+
+      .prev-step,
+      .next-step,
+      .submit-button {
+        flex: 1; /* Make both buttons take equal space */
+        margin: 0 10px; /* Add some margin between buttons */
+      }
+
+      .maroon-button {
+        background-color: maroon; /* Maroon background color */
+        color: white; /* Text color */
+        transition: background-color 0.3s; /* Smooth transition */
+      }
+
+      .maroon-button:hover {
+        background-color: #800000; /* Darker maroon color on hover */
+        color: white; /* Text color */
+        opacity: 0.7;
+      }
+
+      .btn-secondary {
+        background-color: #6c757d; /* Default Bootstrap secondary color */
+        color: white; /* Text color */
+      }
+
+      .nav-link:hover {
+            background-color: #d9534f; /* Light red background on hover */
+            color: #fff;  /* White text on hover */
+            border-radius: 5px; /* Slight rounded corners */
+        }
+
+        /* Active link effect */
+        .nav-link.active {
+            background-color: #c9302c; /* Darker red background when active */
+            color: #fff; /* White text when active */
+            font-weight: bold; /* Optional: Make active link bold */
+        }
+
+    </style>
+  </head>
+  <body>
+
+  
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: #A52A2A;">
+      <div class="container">
+          <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
+              <img src="images/PUPLogo.png" alt="Logo" width="40" class="me-2">
+              PUP Office of Scholarship and Financial Assistance
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+              <ul class="navbar-nav">
+                  <li class="nav-item"><a class="nav-link text-white" href="homepage.html">Home</a></li>
+                  <li class="nav-item"><a class="nav-link text-white" href="notifications.html">Notifications</a></li>
+                  <li class="nav-item"><a class="nav-link text-white" href="applications.html">Applications</a></li>
+                  <li class="nav-item"><a id="logout-btn" class="nav-link text-white" href="login.html"><i class="fas fa-sign-out-alt"></i></a></li>
+                  <li class="nav-item"><a href="api/profile.php" class="nav-link text-white"><i class="fas fa-user"></i></a></li>
+              </ul>
+          </div>
+      </div>
+  </nav>
+
+  <div id="notice"></div>
+
+    <div class="container mt-5">
+      <h2 class="text-center fw-bold text-white" style="text-shadow: 2px 2px 8px rgba(0, 0, 0, 5);"">
+        Scholarship details for <span id="scholarship-title"></span>
+      </h2>
+      <div class="card mt-4">
+        <div class="card-body">
+          <h4 id="scholarship-name"></h4>
+          <p>
+            <strong>Description:<br /></strong>
+            <span id="scholarship-desc"></span>
+          </p>
+          <p>
+            <strong>Eligibility Criteria:<br /></strong>
+            <span id="scholarship-eligibility"></span>
+          </p>
+          <p>
+            <strong>Requirements:<br /></strong>
+            <span id="scholarship-requirements"></span>
+          </p>
+          <p>
+            <strong>Last date to apply:</strong>
+            <span id="scholarship-deadline"></span>
+          </p>
+          <button id="apply-btn" class="btn btn-primary">Loading...</button>
+        </div>
+      </div>
+
+      <!-- Multi-Step Scholarship Application Form (Initially Hidden) -->
+      <div id="application-form" class="card mt-4 hidden">
+        <div class="card-body">
+          <h4 class="text-center">Scholarship Application Form</h4>
+          <form id="scholarshipApplicationForm" enctype="multipart/form-data">
+            <!-- Step 1: Personal Details -->
+            <!-- Step 1: Educational Background -->
+
+            <!-- Input scholarship id to be pushed in the database. Value will be applied dynamically by a script -->
+            <input type="hidden" id="scholarship_id" name="scholarship_id" value="">
+
+            <div id="step-1">
+              <h5>Educational Background</h5>
+              <div class="mb-3">
+                <label class="form-label">High School Attended</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="highSchoolName"
+                  placeholder="High School Name"
+                  name="high_school_name"
+                />
+                <input
+                  type="text"
+                  class="form-control"
+                  id="highSchoolAddress"
+                  placeholder="High School Address"
+                  name = "high_school_address"
+                />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">High School Type</label>
+                <div>
+                  <input
+                    type="radio"
+                    id="highSchoolType1"
+                    name="high_school_type"
+                    value="Public"
+                  />
+                  <label for="highSchoolType1">Public</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    id="highSchoolType2"
+                    name="high_school_type"
+                    value="Private"
+                  />
+                  <label for="highSchoolType2">Private</label>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Year Graduated (High School)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="yearGraduated"
+                  name = "year_graduated"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Degree Program</label>
+                <input type="text" class="form-control" id="degreeProgram" name="degree_program" readonly>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Year Level</label>
+                <input type="text" class="form-control" id="yearLevel" name="year_level" readonly>
+            </div>
+            
+            <div id="yearSpecificFields" class="hidden">
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label">First Year - Semester 1</label>
+                        <input type="text" class="form-control" id="firstYearSem1" name = "gwa_firstSemFirstYear" placeholder="First Semester Field" disabled />
+                    </div>
+                    <div class="col">
+                        <label class="form-label">First Year - Semester 2</label>
+                        <input type="text" class="form-control " id="firstYearSem2" name="gwa_secondSemFirstYear" placeholder="Second Semester Field" disabled />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label">Second Year - Semester 1</label>
+                        <input type="text" class="form-control" id="secondYearSem1" name="gwa_firstSemSecondYear" placeholder="First Semester Field" disabled />
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Second Year - Semester 2</label>
+                        <input type="text" class="form-control" id="secondYearSem2"  name="gwa_secondSemSecondYear" placeholder="Second Semester Field" disabled />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label">Third Year - Semester 1</label>
+                        <input type="text" class="form-control" id="thirdYearSem1" name="gwa_firstSemThirdYear" placeholder="First Semester Field" disabled />
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Third Year - Semester 2</label>
+                        <input type="text" class="form-control" id="thirdYearSem2" name="gwa_secondSemThirdYear" placeholder="Second Semester Field" disabled />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label">Fourth Year - Semester 1</label>
+                        <input type="text" class="form-control" id="fourthYearSem1" name ="gwa_firstSemFourthYear"placeholder="First Semester Field" disabled />
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Fourth Year - Semester 2</label>
+                        <input type="text" class="form-control" id="fourthYearSem2"  name= "gwa_secondSemFourthYear" placeholder="Second Semester Field" disabled />
+                    </div>
+                </div>
+              </div>
+              <div class="button-container">
+                <button type="button" class="btn btn-secondary prev-step">
+                  Back
+                </button>
+                <button type="button" class="btn next-step maroon-button">
+                  Next
+                </button>
+              </div>
+            </div>
+            <!-- Step 3: Family Background -->
+            <div id="step-3" class="hidden">
+              <h5>Household Information</h5>
+              <div class="mb-3">
+                <label class="form-label">Father's Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="fatherName"
+                  name = "father_name"
+                  required
+                />
+              </div>
+              <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Father's Occupation</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="fatherOccupation"
+                      name = "father_occupation"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label class="form-label">Father's Monthly Income</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="fatherIncome"
+                      name = "father_income"
+                      required
+                    />
+                  </div>
+                </div>
+              <div class="mb-3">
+                <label class="form-label">Mother's Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="motherName"
+                  name = "mother_name"
+                  required
+                />
+              </div>
+              <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Mother's Occupation</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="motherOccupation"
+                      name = "mother_occupation"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <label class="form-label">Mother's Monthly Income</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="motherIncome"
+                      name = "mother_income"
+                      required
+                    />
+                  </div>
+                </div>
+              <div class="mb-3">
+                <label class="form-label">Do you have a guardian?</label><br />
+                <input type="hidden" name="has_guardian" value="0">
+                <input type="checkbox" id="hasGuardian" /> Yes
+                
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Guardian's Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="guardianName"
+                  name = "guardian_name"
+                  disabled
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Guardian's Relationship</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="guardianRelationship"
+                  name = "guardian_relationship"
+                  disabled
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Guardian's Occupation</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="guardianOccupation"
+                  name = "guardian_occupation"
+                  disabled
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Guardian's Contact Number</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="guardianContact"
+                  name = "guardian_contact"
+                  disabled
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Electric Bill Amount</label>
+                <input type="text" class="form-control" id="electricBill" name = "electric_bill" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Water Bill Amount</label>
+                <input type="text" class="form-control" id="waterBill" name = "water_bill" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Internet Bill Amount</label>
+                <input type="text" class="form-control" id="internetBill" name = "internet_bill"/>
+              </div>
+              <div class="button-container">
+                <button type="button" class="btn btn-secondary prev-step">Back</button>
+                <button type="button" class="btn next-step maroon-button">Next</button>
+            </div>
+            </div>
+
+            <!-- Step 4: Reason for Applying -->
+            <div id="step-4" class="hidden">
+              <h5>Existing Scholarships</h5>
+              
+              <div class="mb-3">
+                  <label class="form-label">Do you have an existing scholarship?</label><br />
+                  <input type="hidden" name="has_scholarship" value="0"> <!-- Default value --> 
+                  <input type="checkbox" id="hasScholarshipYes" name="has_scholarship" value="1"> Yes
+                  <input type="checkbox" id="hasScholarshipNo" name="has_scholarship" value="0"> No
+
+              </div>
+          
+              <!-- Scholarship Details Section -->
+              <div id="scholarshipDetails" class="hidden">
+                  <label class="form-label">Select Scholarship Type and Enter Grantor Name</label>
+                  
+                  <!-- Row 1 -->
+                  <div class="row mb-3">
+                      <div class="col-3">
+                          <input type="radio" name="scholarship_type1" value="Private" disabled> Private
+                          <input type="radio" name="scholarship_type1" value="Public" disabled> Public
+                      </div>
+                      <div class="col-9">
+                          <input type="text" class="form-control" id="scholarshipName1" placeholder="Name of Existing Scholarship or Grantor" disabled>
+                      </div>
+                  </div>
+          
+                  <!-- Row 2 -->
+                  <div class="row mb-3">
+                      <div class="col-3">
+                          <input type="radio" name="scholarship_type2" value="Private" disabled> Private
+                          <input type="radio" name="scholarship_type2" value="Public" disabled> Public
+                      </div>
+                      <div class="col-9">
+                          <input type="text" class="form-control" id="scholarshipName2" placeholder="Name of Existing Scholarship or Grantor" disabled>
+                      </div>
+                  </div>
+          
+                  <!-- Row 3 -->
+                  <div class="row mb-3">
+                      <div class="col-3">
+                          <input type="radio" name="scholarship_type3" value="Private" disabled> Private
+                          <input type="radio" name="scholarship_type3" value="Public" disabled> Public
+                      </div>
+                      <div class="col-9">
+                          <input type="text" class="form-control" id="scholarshipName3" placeholder="Name of Existing Scholarship or Grantor" disabled>
+                      </div>
+                  </div>
+              </div>
+          
+              <h5>Reason for Applying</h5>
+              <div class="mb-3">
+                  <label class="form-label">Why do you need this scholarship?</label>
+                  <textarea class="form-control" id="reason" rows="3" name ="reason" required></textarea>
+              </div>
+          
+              <div class="button-container">
+                  <button type="button" class="btn btn-secondary prev-step">Back</button>
+                  <button type="button" class="btn btn-secondary next-step maroon-button">Next</button>
+              </div>
+          </div>          
+            <!-- Step 5: Upload Required Documents -->
+            <!-- Step 5: Upload Required Documents -->
+            <div id="step-5" class="hidden">
+              <h5>Upload Required Documents</h5>
+              <p>Please upload the required documents and specify their type.</p>
+              <!-- File Upload Section -->
+              <div id="file-upload-container">
+                  <div class="mb-3 file-input-group d-flex align-items-center">
+                      <!-- <select class="form-select document-type" name="document_types[]"> -->
+                      <select class="form-select document-type" name="document_types[]" id="documentType" aria-label="Select Document Type">
+                          <option value="Transcript">Transcript</option>
+                          <option value="ID Card">ID Card</option>
+                          <option value="Essay">Personal Essay</option>
+                          <option value="Recommendation Letter">Recommendation Letter</option>
+                          <option value="Other">Other</option>
+                      </select>
+                      <input type="text" class="form-control other-document-type ms-2 hidden" name="other_document_types[]" placeholder="Enter document type">
+                      <input type="file" class="form-control ms-2" name="files[]" required>
+                      <button type="button" class="btn btn-danger ms-2 remove-file">Remove</button>
+                  </div>
+              </div>
+
+              <button type="button" class="btn btn-primary mt-2" id="add-file">Add Another File</button>
+
+              <div class="button-container mt-3">
+                  <button type="button" class="btn btn-secondary prev-step">Back</button>
+                  <button type="submit" class="btn btn-success w-100 submit-button">Submit Application</button>
+              </div>
+            </div>
+
+
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+        document.getElementById("logout-btn").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent default form submission or button behavior
+
+            let confirmLogout = confirm("Are you sure you want to log out?");
+            if (confirmLogout) {
+                window.location.href = "login.html"; 
+            }
+        });
+
+      //Function that will insert the value dynamically in the scholarship_id textfield
+      document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const scholarshipId = urlParams.get("id");
+
+    if (scholarshipId) {
+        document.getElementById("scholarship_id").value = scholarshipId;
+    }
+});
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const scholarshipId = urlParams.get("id");
+
+        fetch(
+          `http://localhost/Isko/api/get_scholarship_details.php?id=${scholarshipId}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("scholarship-title").innerText =
+              data.scholarship_Name;
+            document.getElementById("scholarship-name").innerText =
+              data.scholarship_Name;
+            document.getElementById("scholarship-desc").innerText =
+              data.scholarshipDetails;
+            document.getElementById("scholarship-eligibility").innerText =
+              data.eligibility_criteria;
+            document.getElementById("scholarship-requirements").innerText =
+              data.requirements;
+            document.getElementById("scholarship-deadline").innerText =
+              data.scholarship_EndDate;
+          })
+          .catch((error) => console.error("Error fetching data:", error));
+      });
+
+      // show the multi-step application form
+      document
+        .getElementById("apply-btn")
+        .addEventListener("click", function () {
+          const userId = sessionStorage.getItem("user_id"); // Fetch logged-in user ID
+          const scholarshipId = new URLSearchParams(window.location.search).get(
+            "id"
+          );
+
+          if (!userId) {
+            alert("Please log in to apply for scholarships.");
+            return;
+          }
+
+          // Hide scholarship details
+          document.querySelector(".card.mt-4").style.display = "none"; // Hides the scholarship details card
+
+          // Show the application form
+          document
+            .getElementById("application-form")
+            .classList.remove("hidden");
+        });
+
+      // next and back
+      // next and back
+document.querySelectorAll(".next-step").forEach((button) => {
+    button.addEventListener("click", function () {
+        const currentStep = this.closest('div[id^="step-"]');
+        const nextStep = currentStep.nextElementSibling;
+
+        if (nextStep) {
+            currentStep.classList.add("hidden");
+            nextStep.classList.remove("hidden");
+        } else {
+            console.log("No next step found."); // Debugging line
+        }
+    });
+});
+
+document.querySelectorAll(".prev-step").forEach((button) => {
+    button.addEventListener("click", function () {
+        const currentStep = this.closest('div[id^="step-"]');
+        const prevStep = currentStep.previousElementSibling;
+
+        if (prevStep) {
+            currentStep.classList.add("hidden");
+            prevStep.classList.remove("hidden");
+        } else {
+            console.log("No previous step found."); // Debugging line
+        }
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const userId = sessionStorage.getItem("user_id"); // Get logged-in user ID
+    const form = document.getElementById("scholarshipApplicationForm");
+
+    if (userId) {
+        fetch(`http://localhost/Isko/api/get_year_level.php?user_id=${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("degreeProgram").value = data.degree_program || "Not Available";
+                
+                // Set the year level as a string (e.g., "Third")
+                document.getElementById("yearLevel").value = data.year_level || "Not Available";
+                
+                // Activate the correct GWA fields
+                activateGWAFields(data.year_level);
+            })
+            .catch(error => console.error("Error fetching student data:", error));
+    }
+
+    // Handle Form Submission
+    form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form behavior
+
+        // Enable all disabled fields (important for submission)
+        document.querySelectorAll("input:disabled, select:disabled").forEach(input => {
+            input.disabled = false;
+        });
+
+        // Create FormData object
+        const formData = new FormData(this);
+
+        // Explicitly add user_id in formdata
+        const userId = sessionStorage.getItem("user_id");
+    if (userId) {
+        formData.set("user_id", userId);
+    } else {
+        alert("User ID is missing. Please log in again.");
+        return; // Stop form submission if user_id is missing
+    }
+
+        // Convert the year level field value to an integer if it is a string
+        const yearLevelField = document.getElementById("yearLevel");
+        const yearLevelString = yearLevelField.value; // Get the current value
+
+        // Convert the year level string to an integer
+        const yearLevelInt = convertYearToInt(yearLevelString);
+        if (yearLevelInt !== null) {
+            // Replace the value of year_level in FormData with the integer value
+            formData.set("year_level", yearLevelInt); // Set the integer value in FormData
+        }
+
+        console.log("Form Data Sent:");
+        for (let [key, value] of formData.entries()) {
+            // Replace year_level with yearLevel if it exists
+            if (key === "year_level") {
+                console.log("year_level", yearLevelInt);
+            } else {
+                console.log(key, value);
+            }
+        }
+
+        fetch("http://localhost/Isko/api/apply.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.text()) // Expecting a response as text
+        .then(data => {
+            console.log("Server Response:", data);
+            alert("Application submitted successfully!");
+
+            // Ensure reset only happens on successful submission
+            form.reset();  
+        })
+        .catch(error => {
+            console.error("Error submitting form:", error);
+            alert("An error occurred while submitting the application.");
+        });
+    });
+});
+
+function convertYearToInt(yearString) {
+    switch (yearString) {
+        case "First":
+            return 1;
+        case "Second":
+            return 2;
+        case "Third":
+            return 3;
+        case "Fourth":
+            return 4;
+        default:
+            return null; // Return null if invalid input
+    }
+}
+
+function convertYearToInt(yearString) {
+    switch (yearString) {
+        case "First":
+            return 1;
+        case "Second":
+            return 2;
+        case "Third":
+            return 3;
+        case "Fourth":
+            return 4;
+        default:
+            return null; // Return null if invalid input
+    }
+}
+/**
+ * Function to activate GWA fields based on Year Level
+ */
+function activateGWAFields(yearLevel) {
+    const yearSpecificFields = document.getElementById("yearSpecificFields");
+    yearSpecificFields.classList.remove("hidden");
+
+    const semesterFields = [
+        "firstYearSem1", "firstYearSem2",
+        "secondYearSem1", "secondYearSem2",
+        "thirdYearSem1", "thirdYearSem2",
+        "fourthYearSem1", "fourthYearSem2"
+    ];
+
+    // Hide and disable all fields by default
+    semesterFields.forEach(field => {
+        document.getElementById(field).disabled = true;
+        document.getElementById(field).parentElement.classList.add("hidden");
+    });
+
+    // Enable fields based on year level
+    if (yearLevel === 1) enableFields(["firstYearSem1", "firstYearSem2"]);
+    else if (yearLevel === 2) enableFields(["firstYearSem1", "firstYearSem2", "secondYearSem1", "secondYearSem2"]);
+    else if (yearLevel === 3) enableFields(["firstYearSem1", "firstYearSem2", "secondYearSem1", "secondYearSem2", "thirdYearSem1", "thirdYearSem2"]);
+    else if (yearLevel === 4) enableFields(semesterFields);
+}
+
+/**
+ * Function to enable specific fields
+ */
+function enableFields(fields) {
+    fields.forEach(field => {
+        document.getElementById(field).disabled = false;
+        document.getElementById(field).parentElement.classList.remove("hidden");
+    });
+}
+
+
+
+
+    
+
+// Function to activate the correct GWA fields based on Year Level
+function activateGWAFields(yearLevel) {
+    const yearSpecificFields = document.getElementById("yearSpecificFields");
+    yearSpecificFields.classList.remove("hidden");
+
+    const semesterFields = [
+        "firstYearSem1", "firstYearSem2",
+        "secondYearSem1", "secondYearSem2",
+        "thirdYearSem1", "thirdYearSem2",
+        "fourthYearSem1", "fourthYearSem2"
+    ];
+
+    semesterFields.forEach(field => {
+        document.getElementById(field).disabled = true;
+        document.getElementById(field).parentElement.classList.add("hidden");
+    });
+
+    if (yearLevel === "First") enableFields(["firstYearSem1", "firstYearSem2"]);
+    else if (yearLevel === "Second") enableFields(["firstYearSem1", "firstYearSem2", "secondYearSem1", "secondYearSem2"]);
+    else if (yearLevel === "Third") enableFields(["firstYearSem1", "firstYearSem2", "secondYearSem1", "secondYearSem2", "thirdYearSem1", "thirdYearSem2"]);
+    else if (yearLevel === "Fourth") enableFields(semesterFields);
+}
+
+// Function to enable specific fields
+function enableFields(fields) {
+    fields.forEach(field => {
+        document.getElementById(field).disabled = false;
+        document.getElementById(field).parentElement.classList.remove("hidden");
+    });
+}
+
+      // Handle enabling/disabling guardian fields
+      document.getElementById("hasGuardian").onchange = function () {
+        const isChecked = this.checked;
+        document.getElementById("guardianName").disabled = !isChecked;
+        document.getElementById("guardianRelationship").disabled = !isChecked;
+        document.getElementById("guardianOccupation").disabled = !isChecked;
+        document.getElementById("guardianContact").disabled = !isChecked;
+      };
+      document.addEventListener("DOMContentLoaded", function () {
+    const hasScholarshipYes = document.getElementById("hasScholarshipYes");
+    const hasScholarshipNo = document.getElementById("hasScholarshipNo");
+    const scholarshipDetails = document.getElementById("scholarshipDetails");
+    const radioButtons = document.querySelectorAll("input[type='radio'][name^='scholarship_type']");
+    const textFields = document.querySelectorAll("input[id^='scholarshipName']");
+
+    function toggleScholarshipFields(enable) {
+        scholarshipDetails.classList.toggle("hidden", !enable);
+        radioButtons.forEach(radio => {
+            radio.disabled = !enable;
+            if (!enable) radio.checked = false;
+        });
+        textFields.forEach(field => {
+            field.disabled = !enable;
+            if (!enable) field.value = "";
+        });
+    }
+
+    hasScholarshipYes.addEventListener("change", function () {
+        if (this.checked) {
+            toggleScholarshipFields(true);
+            hasScholarshipNo.checked = false;
+        }
+    });
+
+    hasScholarshipNo.addEventListener("change", function () {
+        if (this.checked) {
+            toggleScholarshipFields(false);
+            hasScholarshipYes.checked = false;
+        }
+    });
+});
+
+      // document.getElementById("hasGuardian").addEventListener("change", function() {
+      //     document.getElementById("guardianName").disabled = !this.checked;
+      //     document.getElementById("guardianRelationship").disabled = !this.checked;
+      //     document.getElementById("guardianOccupation").disabled = !this.checked;
+      //     document.getElementById("guardianContact").disabled = !this.checked;
+      // });
+      document.getElementById("hasGuardian").onchange = function () {
+        document.getElementById("guardianName").disabled = !this.checked; // Disable if not checked
+        document.getElementById("guardianRelationship").disabled =
+          !this.checked;
+        document.getElementById("guardianOccupation").disabled = !this.checked;
+        document.getElementById("guardianContact").disabled = !this.checked;
+      };
+
+      // script for adding files for upload:
+      document.addEventListener("DOMContentLoaded", function () {
+    const fileUploadContainer = document.getElementById("file-upload-container");
+
+    // Function to show text input if "Other" is selected
+    function handleDocumentTypeChange(event) {
+        const selectElement = event.target;
+        const textInput = selectElement.nextElementSibling;
+
+        if (selectElement.value === "Other") {
+            textInput.classList.remove("hidden");
+            textInput.required = true;
+        } else {
+            textInput.classList.add("hidden");
+            textInput.required = false;
+            textInput.value = ""; // Clear the input when switching back to another option
+        }
+    }
+
+    // Attach event listener to existing dropdown
+    document.querySelectorAll(".document-type").forEach(select => {
+        select.addEventListener("change", handleDocumentTypeChange);
+    });
+
+    // Function to add a new file input
+    document.getElementById("add-file").addEventListener("click", function () {
+        const newFileInputGroup = document.createElement("div");
+        newFileInputGroup.classList.add("mb-3", "file-input-group", "d-flex", "align-items-center");
+
+        newFileInputGroup.innerHTML = `
+            <select class="form-select document-type" name="document_types[]" id="documentType" aria-label="Select Document Type">
+                <option value="Transcript">Transcript</option>
+                <option value="ID Card">ID Card</option>
+                <option value="Essay">Personal Essay</option>
+                <option value="Recommendation Letter">Recommendation Letter</option>
+                <option value="Other">Other</option>
+            </select>
+            <input type="text" class="form-control other-document-type ms-2 hidden" name="other_document_types[]" placeholder="Enter document type">
+            <input type="file" class="form-control ms-2" name="files[]" required>
+            <button type="button" class="btn btn-danger ms-2 remove-file">Remove</button>
+        `;
+
+        fileUploadContainer.appendChild(newFileInputGroup);
+
+        // Attach event listener to new dropdown
+        newFileInputGroup.querySelector(".document-type").addEventListener("change", handleDocumentTypeChange);
+    });
+
+    // Function to remove a file input
+    document.addEventListener("click", function (event) {
+        if (event.target.classList.contains("remove-file")) {
+            event.target.parentElement.remove();
+        }
+    });
+});
+
+// Enables all disabled fields to ensure that they wil be submitted
+document.getElementById("scholarshipApplicationForm").addEventListener("submit", function () {
+    document.querySelectorAll("input:disabled, select:disabled").forEach(input => {
+        input.disabled = false;
+    });
+});
+
+
+// handles application button. customizes it based on user 
+document.addEventListener("DOMContentLoaded", function () {
+    const userId = sessionStorage.getItem("user_id"); // Fetch logged-in user ID
+    const scholarshipId = new URLSearchParams(window.location.search).get("id");
+
+    if (!userId) {
+        document.getElementById("apply-btn").innerText = "Login to Apply";
+        return;
+    }
+
+    // Check if the user has already applied
+    fetch(`http://localhost/Isko/api/check_application.php?user_id=${userId}&scholarship_id=${scholarshipId}`)
+    .then(response => response.json())
+    .then(data => {
+        const applyBtn = document.getElementById("apply-btn");
+        const notice = document.getElementById("notice");
+
+        if (data.applied) {
+            applyBtn.innerText = "View Application";
+            applyBtn.classList.add("disabled"); // Disable the button
+            applyBtn.onclick = function (event) {
+                event.preventDefault(); // Prevent any redirection
+            };
+
+            // Show notice
+            notice.innerHTML = `
+                <div class="alert alert-warning mt-3" role="alert">
+                    You have already applied for this scholarship.
+                </div>`;
+        } else {
+            applyBtn.innerText = "Apply";
+            applyBtn.classList.remove("disabled"); // Ensure it is enabled for new applicants
+            applyBtn.onclick = function () {
+                document.getElementById("application-form").classList.remove("hidden");
+            };
+        }
+    })
+    .catch(error => console.error("Error checking application status:", error));
+
+});
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

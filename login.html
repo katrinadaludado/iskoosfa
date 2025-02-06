@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUP OSFA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url(images/PUPBackground.png) no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 500px; /* Increased width */
+            padding: 30px; /* Increased padding */
+            background: white;
+            border-radius: 15px; /* Slightly increased border-radius */
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
+            text-align: center;
+        }
+
+        .logo {
+            width: 120px; /* Increased logo size */
+            margin-bottom: 15px;
+        }
+
+        .title {
+            font-size: 32px; /* Increased title size */
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .login-container h3{
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .help {
+            position: fixed;    
+            bottom: 20px;       
+            right: 20px;        
+            z-index: 1000;      
+        }
+
+        .help img {
+            width: 50px;        
+            height: 50px;
+            cursor: pointer;    
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 30px; /* Decreased padding */
+            }
+
+            .logo {
+                width: 100px; /* Decreased logo size */
+            }
+
+            .title {
+                font-size: 24px; /* Decreased title size */
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="help">
+        <a href="inquirypage.html">
+            <img src="images/helpbutton.png" alt="Help">
+        </a>
+     </div>
+
+    <div class="login-container">
+        <img src="images/logo-placeholder.png" alt="Logo" class="logo">
+        <h3>PUP Office of Scholarship and Financial Assistance</h3>
+        <p>Sign in to start your session</p>
+        <form id="loginForm">
+            <div class="mb-3">
+                <input type="text" id="username" class="form-control" placeholder="Username" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" id="password" class="form-control" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="btn btn-danger w-100">Sign in</button>
+
+            <div class="signup-link">
+                <p>I don't have an account. <a href="signupstudent.html">Create One.</a></p>
+            </div>
+
+            <div class="forgot-link">
+                <a href="forgotpassword.html">Forgot Password?</a>
+            </div>
+            
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        if (!username || !password) {
+            alert("Please enter both username and password.");
+            window.location.href = "login.html"; // Redirect back to login
+            return;
+        }
+
+        fetch("http://localhost/Isko/api/login.php", {  
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("API Response:", data); // Debugging
+
+            if (data.success) {
+                sessionStorage.setItem("user_id", data.user_id);
+                sessionStorage.setItem("user_name", data.user_name);
+                window.location.href = "homepage.html"; // Redirect to homepage
+            } else {
+                alert(data.message); // Show error message
+                window.location.href = "login.html"; // Redirect back to login
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again.");
+            window.location.href = "login.html"; // Redirect back on error
+        });
+    });
+
+
+        
+    </script>
+</body>
+</html>

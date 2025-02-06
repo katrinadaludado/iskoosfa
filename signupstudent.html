@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="signup.css">
+    <title>Sign Up</title>
+    <style>
+        .container-wrapper {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100vh;
+            margin-right: 10%;
+        }
+
+        .form-section {
+            flex: 1;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border: 1px solid #fff;
+            margin-bottom: 30px;
+        }
+
+        .title-section {
+            flex: 1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            margin-right: 150px;
+            margin-left: 200px;
+        }
+
+        .title-section img {
+            max-width: 500px;
+            margin-bottom: -30px;
+        }
+
+        .text-light {
+            color: rgb(0, 0, 0);
+            margin-top: 40px;
+        }
+
+        /* Media Query for Mobile Devices */
+        @media (max-width: 768px) {
+            .container-wrapper {
+                flex-direction: column; /* Stack logo and form vertically */
+                margin-right: 0;
+                align-items: center;  /* Center the items */
+            }
+
+            .title-section {
+                margin-right: 0;
+                margin-left: 0;
+                text-align: center;
+                width: 100%;  /* Ensure full width for mobile */
+                font-size: 1.2em; 
+            }
+
+            .form-section {
+                width: 100%; /* Ensure form section takes up full width on mobile */
+                padding: 20px; /* Reduce padding for mobile */
+            }
+
+            .title-section img {
+                max-width: 25%; /* Allow the image to be responsive */
+            }
+        }
+
+        body {
+            overflow: auto; /* Makes the body scrollable */
+            min-height: 100vh; /* Ensure body height is at least the height of the screen */
+        }
+
+        .help {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .help img {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column align-items-center justify-content-center vh-100">
+    <div class="container-wrapper">
+        <!-- Title and Logo Section (Left side) -->
+        <div class="title-section">
+            <img src="images/PUPLogo.png" alt="PUP Logo" class="img-fluid">
+            <h1 class="text-light fw-bold">PUP Office of Scholarship <br> and Finance Assistance</h1>
+        </div>
+
+        <div class="help">
+            <a href="inquirypage.html">
+                <img src="images/helpbutton.png" alt="Help">
+            </a>
+        </div>
+
+        <!-- Form Section (Right side) -->
+        <div class="form-section p-4 rounded shadow" style="background: white; color: black;">
+            <form id="signupForm" action="signupForm" method="post">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="firstname" class="form-label text-dark fw-bold">First Name</label>
+                        <input type="text" class="form-control" name="firstname" placeholder="First Name" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="lastname" class="form-label text-dark fw-bold">Last Name</label>
+                        <input type="text" class="form-control" name="lastname" placeholder="Last Name" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="middlename" class="form-label text-dark fw-bold">Middle Name</label>
+                        <input type="text" class="form-control" name="middlename" placeholder="Middle Name">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="suffix" class="form-label text-dark fw-bold">Suffix</label>
+                        <input type="text" class="form-control" name="suffix" placeholder="Suffix">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="contactnumber" class="form-label text-dark fw-bold">Contact Number</label>
+                        <input type="number" class="form-control" name="contactnumber" placeholder="Contact Number" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email" class="form-label text-dark fw-bold">PUP WebEmail</label>
+                        <input type="email" class="form-control" name="email" placeholder="PUP WebEmail" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="studentnumber" class="form-label text-dark fw-bold">Student Number</label>
+                        <input type="text" class="form-control" id="studentnumber" name="studentnumber" placeholder="Student Number (e.g. 2022-08408-MN-0)" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="password" class="form-label text-dark fw-bold">Password</label>
+                        <input type="password" class="form-control" name="password" placeholder="Password" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="password2" class="form-label text-dark fw-bold">Confirm Password</label>
+                        <input type="password" class="form-control" name="password2" placeholder="Confirm Password" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="courseProgram" class="form-label text-dark fw-bold">Course Program</label>
+                        <select name="courseProgram" id="courseProgram" class="form-select" required>
+                            <option value="">Select Course Program</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="branchCampus" class="form-label text-dark fw-bold">Branch/Campus</label>
+                        <select name="branchCampus" id="branchCampus" class="form-select" required>
+                            <option value="">Select Branch/Campus</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="currentYear" class="form-label text-dark fw-bold">Current Year</label>
+                        <select name="currentYear" id="currentYear" class="form-select" required>
+                            <option value="">Select Current Year</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="admin_file" class="form-label text-dark fw-bold">COR File</label>
+                    <input type="file" class="form-control" name="cor_file" required>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-danger w-100">Sign Up</button>
+                </div>
+
+                <div class="text-center mt-3">
+                    <p class="text-dark">I have an account. <a href="login.html" class="fw-bold text-dark fw-bold ">Log In</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Define the dropdown options
+            const coursePrograms = [
+                            "BSIT", "BSCS", "BSIS", "BSA", 
+                            "BSBA","BSAc", "BSBA", "BSEnt", 
+                            "BSHM", "BSTM","BSME", "BSEE", "BSCE","BSECE", "BSIE",
+                            "BSMath", "BSAM","BSPsy", "BSPolSci","BSJour", "BSBC",
+                            "BSEcon", "BSPA", "BSBio", "BSChem", "BSPhy","BSN", 
+                            "BSP", "BSRT","BSA", "BSID","BSEd"
+                
+                        ];
+
+
+            const branches = [
+                            "Main", "San Juan", "Taguig", "Parañaque",
+                            "San Pedro", "Biñan", "Santa Rosa", "Maragondon",
+                            "Mulanay", "Lopez", "Bansud", "Calauan",
+                            "Pulilan", "San Ildefonso", "Ragay", "Unisan",
+                            "Mariveles", "Sta. Maria", "Sto. Tomas"
+                        ];
+
+
+            const years = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
+            
+            // Get the dropdown elements
+            const courseProgramSelect = document.getElementById('courseProgram');
+            const branchCampusSelect = document.getElementById('branchCampus');
+            const currentYearSelect = document.getElementById('currentYear');
+            
+            // Populate the courseProgram dropdown
+            coursePrograms.forEach(function(program) {
+                const option = document.createElement('option');
+                option.value = program;
+                option.textContent = program;
+                courseProgramSelect.appendChild(option);
+            });
+    
+            // Populate the branchCampus dropdown
+            branches.forEach(function(branch) {
+                const option = document.createElement('option');
+                option.value = branch;
+                option.textContent = branch;
+                branchCampusSelect.appendChild(option);
+            });
+    
+            // Populate the currentYear dropdown
+            years.forEach(function(year) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                currentYearSelect.appendChild(option);
+            });
+        });
+    
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // Prevent default form submission
+    
+            const formData = new FormData(this); // Get form data
+            const password = formData.get("password");
+            const password2 = formData.get("password2");
+    
+            // Password validation
+            if (password !== password2) {
+                alert("Passwords do not match!");
+                return;
+            }
+    
+            try {
+                const response = await fetch("http://127.0.0.1/Isko/api/studentsignup.php", { 
+                    method: "POST",
+                    body: formData
+                });
+    
+                const result = await response.json(); // Parse JSON response
+    
+                if (response.ok) {
+                    alert("Sign-up successful!");
+                    window.location.href = "login.html"; // Redirect to login page
+                } else {
+                    alert("Error: " + result.message); // Show backend error message
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Something went wrong. Please try again.");
+            }
+        });
+    </script>    
+</body>
+</html>

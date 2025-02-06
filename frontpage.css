@@ -1,0 +1,92 @@
+body{
+    background: url(images/PUPBackground.png);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.logo img{
+    width: 300px;
+    height: 300px;
+    margin-top: 100px;
+    margin-left: 40%;
+}
+
+.help {
+    position: fixed;    
+    bottom: 20px;       
+    right: 20px;        
+    z-index: 1000;      
+}
+
+.help img {
+    width: 50px;        
+    height: 50px;
+    cursor: pointer;    
+}
+
+
+.description h1{
+    font-size: 50px;
+    color: white;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.description h2{
+    font-size: 30px;
+    color: white;
+    text-align: center;
+    margin-bottom: -10px;
+}
+
+.description p{
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    margin-bottom: 40px;
+
+}
+
+
+.button button {
+    display: block; 
+    width: 250px; 
+    margin: 0 auto 10px;
+    background-color: #A32100;
+    border-radius: 20px;
+    font-size: 20px;
+    color: white;;
+    padding: 10px 7px;
+    font-weight: strong;
+    box-shadow: none;
+    border: none;
+    cursor: pointer;
+}
+
+.button button:hover {
+    background-color: #ffffff;
+    color: #A32100;
+}
+
+/* Transition */
+button {
+    background-color: #4CAF50;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+    transform: scale(1.1);  /* Enlarges the button on hover */
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+div {
+    animation: fadeIn 2s ease-in-out;
+}
+
